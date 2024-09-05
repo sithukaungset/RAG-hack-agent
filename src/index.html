@@ -75,19 +75,6 @@
       </fluent-card>
     </div>
 
-    <!-- New Chat Section for typing and sending messages -->
-    <div class="chat-panel">
-      <h2>Chat Panel:</h2>
-      <div class="chat-box">
-        <ul id="chathistory" class="chat-history"></ul>
-      </div>
-
-      <div class="chat-input">
-        <input type="text" id="chatInput" placeholder="Type your message here..." />
-        <button id="sendMessageButton" onclick="sendMessage()">Send</button>
-      </div>
-    </div>
-
     <div class="main-block">
       <ul id="chathistory" class="chat-history"></ul>
     </div>
@@ -107,28 +94,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    // JavaScript function to handle sending the chat message
-    function sendMessage() {
-      var input = document.getElementById('chatInput');
-      var message = input.value.trim();
-
-      if (message) {
-        var chatHistory = document.getElementById('chathistory');
-        var newMessage = document.createElement('li');
-        newMessage.textContent = "You: " + message;
-        chatHistory.appendChild(newMessage);
-
-        // Clear the input field after sending
-        input.value = '';
-
-        // You can call any function to process this message, like sending it to a chatbot or server
-        // For example: window.processMessage(message);
-      }
-    }
-  </script>
-
 </body>
 
 </html>
