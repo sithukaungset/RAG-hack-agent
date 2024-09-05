@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Megazone Cloud (Microsoft Technology Center)</title>
+
+  <link href="./css/styles.css" rel="stylesheet" />
+
+  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+  <script src="./js/main.js"></script>
+
+  <script type="module" src="https://unpkg.com/@fluentui/web-components"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+
+<body>
+  <div class="header">
+    <img src="images/megazonelogo.png" alt="Logo" width="32" height="32" />
+    <span class="header__title">Megazone Cloud (Microsoft Technology Center)</span>
+
+    <ul class="menu-items">
+      <li>AZURE</li>
+      <li>SERVICES</li>
+      <li>SOLUTIONS</li>
+      <li>PARTNERS</li>
+      <li>CLIENTS</li>
+      <li>RESOURCES</li>
+    </ul>
+  </div>
+
+  <div class="title">
+    <h1>Megazone Avatar</h1>
+  </div>
+
+  <div class="main">
+    <div class="main-block">
+      <h2>Frequently Asked Questions:</h2>
+
+      <div class="suggested-questions">
+        <button onclick="window.speak(`What are the benefits of the Dual Repair Lift Cream?`)">
+          What is your return policy?
+        </button>
+
+        <button onclick="window.speak(`Can you explain the Lift and Renew Double Shot Program?`)">
+          How can I track my order?
+        </button>
+
+        <button onclick="window.speak(`What is the Prime Reserve Retrinity Serum?`)">
+          How do I make changes to or cancel an existing order?
+        </button>
+
+        <button onclick="window.speak(`Tell me about your clinical tests for anti-aging effects.`)">
+          What are your shipping options and costs?
+        </button>
+      </div>
+    </div>
+
+    <div class="avatar-block">
+      <div id="remoteVideo">
+      </div>
+      <canvas id="canvas" width="720" height="1080" style="background-color: transparent;" hidden="hidden"></canvas>
+      <canvas id="tmpCanvas" width="720" height="1080" hidden="hidden"></canvas>
+      
+      <fluent-card class="record-card">
+        <div class="outerbutton">
+          <button id="startRecording" onclick="window.startRecording()" class="round-button">
+            <i id="buttonIcon" class="fas fa-microphone"></i>
+          </button>
+        </div>
+
+        <label id="spokenText" for="spokenText">
+          Press the mic to start talking
+        </label>
+      </fluent-card>
+    </div>
+
+    <div class="main-block">
+      <ul id="chathistory" class="chat-history"></ul>
+    </div>
+  </div>
+
+  <div id="loginOverlay">
+    <div id="gradientOverlay">
+      <div class="loginCard">
+        <div class="loginCard__header">Login</div>
+
+        <fluent-text-field appearance="outline" placeholder="user@email.com">Username</fluent-text-field>
+        <fluent-text-field appearance="outline" placeholder="****************">Password</fluent-text-field>
+
+        <button id="playVideo" onclick="window.startSession()">
+          <span id="playVideo__text" class="playVideo__text">Login</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
