@@ -235,44 +235,102 @@ async function greeting() {
 
 window.speak = (text) => {
   async function speak(text) {
-    addToConversationHistory(text, 'dark')
+    addToConversationHistory(text, 'dark');
 
-    fetch("/api/detectLanguage?text="+text, {
-      method: "POST"
-    })
-      .then(response => response.text())
-      .then(async language => {
-        console.log(`Detected language: ${language}`);
+    // Check if the user wants to generate an article
+    if (text.toLowerCase().includes('generate an article')) {
+      // Prompt the user for additional information
+      const research = prompt('Enter research context:');
+      const products = prompt('Enter products context:');
+      const assignment = prompt('Enter assignment context:');
 
-        const generatedResult = await generateText(text);
-        
-        let spokenTextssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyMultilingualNeural'><lang xml:lang="${language}">${generatedResult}</lang></voice></speak>`
-
-        if (language == 'ar-AE') {
-          spokenTextssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='ar-AE-FatimaNeural'><lang xml:lang="${language}">${generatedResult}</lang></voice></speak>`
-        }
-        let spokenText = generatedResult
-        avatarSynthesizer.speakSsmlAsync(spokenTextssml, (result) => {
-          if (result.reason === SpeechSDK.ResultReason.SynthesizingAudioCompleted) {
-            console.log("Speech synthesized to speaker for text [ " + spokenText + " ]. Result ID: " + result.resultId)
-          } else {
-            console.log("Unable to speak text. Result ID: " + result.resultId)
-            if (result.reason === SpeechSDK.ResultReason.Canceled) {
-              let cancellationDetails = SpeechSDK.CancellationDetails.fromResult(result)
-              console.log(cancellationDetails.reason)
-              if (cancellationDetails.reason === SpeechSDK.CancellationReason.Error) {
-                console.log(cancellationDetails.errorDetails)
-              }
-            }
-          }
-        })
+      try {
+        const articleResults = await generateArticle(research, products, assignment);
+        displayArticle(articleResults);
+      } catch (error) {
+        console.error('Error generating article:', error);
+      }
+    } else {
+      // Existing logic for handling other inputs
+      fetch(`/api/detectLanguage?text=${encodeURIComponent(text)}`, {
+        method: 'POST',
       })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+        .then(response => response.text())
+        .then(async language => {
+          console.log(`Detected language: ${language}`);
+
+          const generatedResult = await generateText(text);
+
+          let spokenTextssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'>
+            <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyMultilingualNeural'>
+              <lang xml:lang="${language}">${generatedResult}</lang>
+            </voice>
+          </speak>`;
+
+          if (language == 'ar-AE') {
+            spokenTextssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'>
+              <voice xml:lang='en-US' xml:gender='Female' name='ar-AE-FatimaNeural'>
+                <lang xml:lang="${language}">${generatedResult}</lang>
+              </voice>
+            </speak>`;
+          }
+
+          avatarSynthesizer.speakSsmlAsync(spokenTextssml, (result) => {
+            if (result.reason === SpeechSDK.ResultReason.SynthesizingAudioCompleted) {
+              console.log(`Speech synthesized for text [${generatedResult}]. Result ID: ${result.resultId}`);
+            } else {
+              console.error(`Unable to speak text. Result ID: ${result.resultId}`);
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
   }
   speak(text);
-}
+};
+
+// window.speak = (text) => {
+//   async function speak(text) {
+//     addToConversationHistory(text, 'dark')
+
+//     fetch("/api/detectLanguage?text="+text, {
+//       method: "POST"
+//     })
+//       .then(response => response.text())
+//       .then(async language => {
+//         console.log(`Detected language: ${language}`);
+
+//         const generatedResult = await generateText(text);
+        
+//         let spokenTextssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyMultilingualNeural'><lang xml:lang="${language}">${generatedResult}</lang></voice></speak>`
+
+//         if (language == 'ar-AE') {
+//           spokenTextssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='ar-AE-FatimaNeural'><lang xml:lang="${language}">${generatedResult}</lang></voice></speak>`
+//         }
+//         let spokenText = generatedResult
+//         avatarSynthesizer.speakSsmlAsync(spokenTextssml, (result) => {
+//           if (result.reason === SpeechSDK.ResultReason.SynthesizingAudioCompleted) {
+//             console.log("Speech synthesized to speaker for text [ " + spokenText + " ]. Result ID: " + result.resultId)
+//           } else {
+//             console.log("Unable to speak text. Result ID: " + result.resultId)
+//             if (result.reason === SpeechSDK.ResultReason.Canceled) {
+//               let cancellationDetails = SpeechSDK.CancellationDetails.fromResult(result)
+//               console.log(cancellationDetails.reason)
+//               if (cancellationDetails.reason === SpeechSDK.CancellationReason.Error) {
+//                 console.log(cancellationDetails.errorDetails)
+//               }
+//             }
+//           }
+//         })
+//       })
+//       .catch(error => {
+//         console.error('Error:', error);
+//       });
+//   }
+//   speak(text);
+// }
 
 window.stopSession = () => {
   speechSynthesizer.close()
@@ -397,4 +455,60 @@ function makeBackgroundTransparent(timestamp) {
   }
 
   window.requestAnimationFrame(makeBackgroundTransparent)
+}
+
+async function generateArticle(research, products, assignment) {
+  try {
+    const response = await fetch('https://your-writing-agent.azurewebsites.net/api/article', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Include the API key if your backend requires it
+        // 'api_key': 'your-secure-api-key', // Be cautious with API keys in frontend code
+      },
+      body: JSON.stringify({
+        research: research,
+        products: products,
+        assignment: assignment,
+        evaluate: false,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data; // This will be the generated article
+  } catch (error) {
+    console.error('Error generating article:', error);
+    // Handle errors appropriately
+  }
+}
+
+
+function displayArticle(articleData) {
+  let articleContent = '';
+
+  articleData.forEach((item) => {
+    let parsedItem = item;
+    if (typeof item === 'string') {
+      parsedItem = JSON.parse(item);
+    }
+
+    if (parsedItem.type === 'partial' && parsedItem.data.text) {
+      articleContent += parsedItem.data.text;
+    }
+  });
+
+  // Display the article content in the UI
+  const articleContainer = document.getElementById('articleContainer');
+  articleContainer.innerHTML = `<h2>Generated Article</h2><p>${articleContent}</p>`;
+
+  // Optionally, have the avatar read out the article
+  avatarSynthesizer.speakTextAsync(articleContent, (result) => {
+    if (result.error) {
+      console.error('Error synthesizing speech:', result.error);
+    }
+  });
 }
