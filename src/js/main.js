@@ -209,7 +209,7 @@ window.startSession = () => {
 }
 
 async function greeting() {
-  addToConversationHistory("안녕하세요, 저는 매가존 클라우드 AI Assistant, Lisa 라고 합니다. 무엇을 도와드릴까요?", "light")
+  addToConversationHistory("Hi, My name is Lisa, your AI Assistant for RAG related tasks. How can I help you", "light")
 
   let spokenText = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'><voice xml:lang='ko-KR' xml:gender='Female' name='ko-KR-JiMinNeural'>안녕하세요, 저는 매가존 클라우드 AI Assistant, Lisa 라고 합니다. 무엇을 도와드릴까요?</voice></speak>"
   avatarSynthesizer.speakSsmlAsync(spokenText, (result) => {
