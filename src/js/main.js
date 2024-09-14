@@ -512,3 +512,73 @@ function displayArticle(articleData) {
     }
   });
 }
+
+// New function to handle the text input submission
+function submitUserText() {
+  const userInput = document.getElementById('userInput').value;
+  if (userInput) {
+    window.speak(userInput);
+    document.getElementById('userInput').value = '';  // Clear input after submission
+  } else {
+    console.error("Input is empty. Please enter a query.");
+  }
+}
+
+// Function to append the user's input to conversation history and send it to the backend for processing
+window.speak = (text) => {
+  async function speak(text) {
+    addToConversationHistory(text, 'dark');
+
+    // Check if the user wants to generate an article
+    if (text.toLowerCase().includes('generate an article')) {
+      // Prompt the user for additional information
+      const research = prompt('Enter research context:');
+      const products = prompt('Enter products context:');
+      const assignment = prompt('Enter assignment context:');
+
+      try {
+        const articleResults = await generateArticle(research, products, assignment);
+        displayArticle(articleResults);
+      } catch (error) {
+        console.error('Error generating article:', error);
+      }
+    } else {
+      // Existing logic for handling other inputs
+      fetch(`/api/detectLanguage?text=${encodeURIComponent(text)}`, {
+        method: 'POST',
+      })
+        .then(response => response.text())
+        .then(async language => {
+          console.log(`Detected language: ${language}`);
+
+          const generatedResult = await generateText(text);
+
+          let spokenTextssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'>
+            <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyMultilingualNeural'>
+              <lang xml:lang="${language}">${generatedResult}</lang>
+            </voice>
+          </speak>`;
+
+          if (language == 'ar-AE') {
+            spokenTextssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'>
+              <voice xml:lang='en-US' xml:gender='Female' name='ar-AE-FatimaNeural'>
+                <lang xml:lang="${language}">${generatedResult}</lang>
+              </voice>
+            </speak>`;
+          }
+
+          avatarSynthesizer.speakSsmlAsync(spokenTextssml, (result) => {
+            if (result.reason === SpeechSDK.ResultReason.SynthesizingAudioCompleted) {
+              console.log(`Speech synthesized for text [${generatedResult}]. Result ID: ${result.resultId}`);
+            } else {
+              console.error(`Unable to speak text. Result ID: ${result.resultId}`);
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  }
+  speak(text);
+}
