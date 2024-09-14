@@ -209,23 +209,28 @@ window.startSession = () => {
 }
 
 async function greeting() {
-  addToConversationHistory("Hello, I’m Lisa, your AI Assistant, here to help you with any RAG-related tasks. How may I assist you today?", "light")
+  addToConversationHistory("Hello, I’m Lisa, your AI Assistant, here to help you with any RAG-related tasks. How may I assist you today?", "light");
 
-  let spokenText = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JiMinNeural'>Hello, I’m Lisa, your AI Assistant, here to help you with any RAG-related tasks. How may I assist you today??</voice></speak>"
+  let spokenText = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'>
+                     <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyMultilingualNeural'>
+                       Hello, I’m Lisa, your AI Assistant, here to help you with any RAG-related tasks. How may I assist you today?
+                     </voice>
+                   </speak>`;
+  
   avatarSynthesizer.speakSsmlAsync(spokenText, (result) => {
     if (result.reason === SpeechSDK.ResultReason.SynthesizingAudioCompleted) {
-      console.log("Speech synthesized to speaker for text [ " + spokenText + " ]. Result ID: " + result.resultId)
+      console.log("Speech synthesized to speaker for text [ " + spokenText + " ]. Result ID: " + result.resultId);
     } else {
-      console.log("Unable to speak text. Result ID: " + result.resultId)
+      console.log("Unable to speak text. Result ID: " + result.resultId);
       if (result.reason === SpeechSDK.ResultReason.Canceled) {
-        let cancellationDetails = SpeechSDK.CancellationDetails.fromResult(result)
-        console.log(cancellationDetails.reason)
+        let cancellationDetails = SpeechSDK.CancellationDetails.fromResult(result);
+        console.log(cancellationDetails.reason);
         if (cancellationDetails.reason === SpeechSDK.CancellationReason.Error) {
-          console.log(cancellationDetails.errorDetails)
+          console.log(cancellationDetails.errorDetails);
         }
       }
     }
-  })
+  });
 }
 
 window.speak = (text) => {
