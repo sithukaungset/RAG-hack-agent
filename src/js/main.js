@@ -492,7 +492,10 @@ async function generateArticle(research, products, assignment) {
         displayArticle(articleContent);
       }
     }
-
+    
+    // After displaying the article, have the avatar read it aloud
+    speakArticle(articleContent);
+    
     return articleContent;
   } catch (error) {
     console.error('Error generating article:', error);
@@ -526,9 +529,6 @@ function displayArticle(articleContent) {
   const articleContainer = document.getElementById('articleContainer');
   if (articleContainer) {
     articleContainer.innerHTML = `<h2>Generated Article</h2><p>${articleContent}</p>`;
-
-    // After displaying the article, have the avatar read it aloud
-    speakArticle(articleContent);
   } else {
     console.error('Article container not found');
   }
