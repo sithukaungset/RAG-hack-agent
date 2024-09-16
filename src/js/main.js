@@ -459,12 +459,10 @@ function makeBackgroundTransparent(timestamp) {
 
 async function generateArticle(research, products, assignment) {
   try {
-    const response = await fetch('https://your-writing-agent.azurewebsites.net/api/article', {
+    const response = await fetch('https://hackathon-rag-yzkw-api.graywave-14fe07de.eastus2.azurecontainerapps.io/api/article', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Include the API key if your backend requires it
-        // 'api_key': 'your-secure-api-key', // Be cautious with API keys in frontend code
       },
       body: JSON.stringify({
         research: research,
@@ -478,12 +476,48 @@ async function generateArticle(research, products, assignment) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
 
-    const data = await response.json();
-    return data; // This will be the generated article
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+    let done = false;
+    let articleContent = '';
+
+    while (!done) {
+      const { value, done: readerDone } = await reader.read();
+      done = readerDone;
+      if (value) {
+        const chunk = decoder.decode(value, { stream: !done });
+        // Process each chunk
+        articleContent += processChunk(chunk);
+        // Optionally update the UI in real-time
+        displayArticle(articleContent);
+      }
+    }
+
+    return articleContent;
   } catch (error) {
     console.error('Error generating article:', error);
     // Handle errors appropriately
   }
+}
+
+function processChunk(chunk) {
+  let articleText = '';
+  const lines = chunk.split('\n');
+
+  for (const line of lines) {
+    if (line.trim()) {
+      try {
+        const data = JSON.parse(line);
+        if (data.type === 'partial' && data.data.text) {
+          articleText += data.data.text;
+        }
+      } catch (err) {
+        console.error('Error parsing JSON:', err);
+      }
+    }
+  }
+
+  return articleText;
 }
 
 
