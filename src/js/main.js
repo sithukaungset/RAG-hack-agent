@@ -493,11 +493,11 @@ async function generateArticle(research, products, assignment) {
       }
     }
     
-    
-    
-    return articleContent;
     // After displaying the article, have the avatar read it aloud
     speakArticle(articleContent);
+    
+    return articleContent;
+    
   } catch (error) {
     console.error('Error generating article:', error);
     document.getElementById('articleContainer').innerHTML = `<p>Error generating article. Please try again later.</p>`;
