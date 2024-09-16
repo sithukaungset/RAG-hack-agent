@@ -526,9 +526,30 @@ function displayArticle(articleContent) {
   const articleContainer = document.getElementById('articleContainer');
   if (articleContainer) {
     articleContainer.innerHTML = `<h2>Generated Article</h2><p>${articleContent}</p>`;
+
+    // After displaying the article, have the avatar read it aloud
+    speakArticle(articleContent);
   } else {
     console.error('Article container not found');
   }
+}
+
+function speakArticle(articleContent) {
+  // Create SSML for the avatar to read the article
+  let spokenTextssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'>
+                          <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyMultilingualNeural'>
+                            ${articleContent}
+                          </voice>
+                        </speak>`;
+
+  // Use the avatarSynthesizer to speak the SSML content
+  avatarSynthesizer.speakSsmlAsync(spokenTextssml, (result) => {
+    if (result.reason === SpeechSDK.ResultReason.SynthesizingAudioCompleted) {
+      console.log('Speech synthesized for the article.');
+    } else {
+      console.error(`Error synthesizing speech for article. Result ID: ${result.resultId}`);
+    }
+  });
 }
 
 // New function to handle the text input submission
