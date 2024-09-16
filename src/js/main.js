@@ -521,30 +521,13 @@ function processChunk(chunk) {
 }
 
 
-function displayArticle(articleData) {
-  let articleContent = '';
-
-  articleData.forEach((item) => {
-    let parsedItem = item;
-    if (typeof item === 'string') {
-      parsedItem = JSON.parse(item);
-    }
-
-    if (parsedItem.type === 'partial' && parsedItem.data.text) {
-      articleContent += parsedItem.data.text;
-    }
-  });
-
-  // Display the article content in the UI
+function displayArticle(articleContent) {
   const articleContainer = document.getElementById('articleContainer');
-  articleContainer.innerHTML = `<h2>Generated Article</h2><p>${articleContent}</p>`;
-
-  // Optionally, have the avatar read out the article
-  avatarSynthesizer.speakTextAsync(articleContent, (result) => {
-    if (result.error) {
-      console.error('Error synthesizing speech:', result.error);
-    }
-  });
+  if (articleContainer) {
+    articleContainer.innerHTML = `<h2>Generated Article</h2><p>${articleContent}</p>`;
+  } else {
+    console.error('Article container not found');
+  }
 }
 
 // New function to handle the text input submission
