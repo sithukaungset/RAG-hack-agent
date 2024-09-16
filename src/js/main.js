@@ -496,6 +496,7 @@ async function generateArticle(research, products, assignment) {
     return articleContent;
   } catch (error) {
     console.error('Error generating article:', error);
+    document.getElementById('articleContainer').innerHTML = `<p>Error generating article. Please try again later.</p>`;
     // Handle errors appropriately
   }
 }
