@@ -493,10 +493,11 @@ async function generateArticle(research, products, assignment) {
       }
     }
     
-    // After displaying the article, have the avatar read it aloud
-    speakArticle(articleContent);
+    
     
     return articleContent;
+    // After displaying the article, have the avatar read it aloud
+    speakArticle(articleContent);
   } catch (error) {
     console.error('Error generating article:', error);
     document.getElementById('articleContainer').innerHTML = `<p>Error generating article. Please try again later.</p>`;
