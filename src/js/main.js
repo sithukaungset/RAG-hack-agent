@@ -529,7 +529,8 @@ function processChunk(chunk) {
 function displayArticle(articleContent) {
   const articleContainer = document.getElementById('articleContainer');
   if (articleContainer) {
-    articleContainer.innerHTML = `<h2>Generated Article</h2><p>${articleContent}</p>`;
+    // articleContainer.innerHTML = `<h2>Generated Skincare Routine</h2><p>${articleContent}</p>`;
+    articleContainer.innerHTML = `<h2 style="color: white;">Generated Skincare Routine</h2><p style="color: white;">${articleContent}</p>`;
   } else {
     console.error('Article container not found');
   }
