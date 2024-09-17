@@ -238,7 +238,7 @@ window.speak = (text) => {
     addToConversationHistory(text, 'dark');
 
     // Check if the user wants to generate a skincare routine
-    if (text.toLowerCase().includes('generate a skincare routine')) {
+    if (text.toLowerCase().includes('Create the skincare routine')) {
       // Prompt the user for additional information
       const research = prompt('Enter skin type:');
       const products = prompt('Enter products:');
