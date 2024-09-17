@@ -209,11 +209,11 @@ window.startSession = () => {
 }
 
 async function greeting() {
-  addToConversationHistory("Hello, I’m Lisa, your AI Assistant, here to help you with any RAG-related tasks. How may I assist you today?", "light");
+  addToConversationHistory("Hello, I’m Lisa, your Beauty AI Assistant. How may I assist you today?", "light");
 
   let spokenText = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'>
                      <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyMultilingualNeural'>
-                       Hello, I’m Lisa, your AI Assistant, here to help you with any RAG-related tasks. How may I assist you today?
+                       Hello, I’m Lisa, your Beauty AI Assistant. How may I assist you today?
                      </voice>
                    </speak>`;
   
