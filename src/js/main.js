@@ -240,9 +240,9 @@ window.speak = (text) => {
     // Check if the user wants to generate a skincare routine
     if (text.toLowerCase().includes('generate a skincare routine')) {
       // Prompt the user for additional information
-      // const research = prompt('Enter research context:');
-      // const products = prompt('Enter products context:');
-      // const assignment = prompt('Enter assignment context:');
+      const research = prompt('Enter skin type:');
+      const products = prompt('Enter products:');
+      const assignment = prompt('Enter specific skincare:');
 
       try {
         const articleResults = await generateArticle(research, products, assignment);
@@ -465,9 +465,9 @@ async function generateArticle(research, products, assignment) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        research: "skincare routine",
-        products: "masks",
-        assignment: "Create the perfect skincare routine",
+        research: research,
+        products: products,
+        assignment: assignment,
         evaluate: false,
       }),
     });
