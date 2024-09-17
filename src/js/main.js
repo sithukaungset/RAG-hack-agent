@@ -237,12 +237,12 @@ window.speak = (text) => {
   async function speak(text) {
     addToConversationHistory(text, 'dark');
 
-    // Check if the user wants to generate an article
-    if (text.toLowerCase().includes('generate an article')) {
+    // Check if the user wants to generate a skincare routine
+    if (text.toLowerCase().includes('generate a skincare routine')) {
       // Prompt the user for additional information
-      const research = prompt('Enter research context:');
-      const products = prompt('Enter products context:');
-      const assignment = prompt('Enter assignment context:');
+      // const research = prompt('Enter research context:');
+      // const products = prompt('Enter products context:');
+      // const assignment = prompt('Enter assignment context:');
 
       try {
         const articleResults = await generateArticle(research, products, assignment);
@@ -465,9 +465,9 @@ async function generateArticle(research, products, assignment) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        research: research,
-        products: products,
-        assignment: assignment,
+        research: "skincare routine",
+        products: "masks",
+        assignment: "Create the perfect skincare routine",
         evaluate: false,
       }),
     });
