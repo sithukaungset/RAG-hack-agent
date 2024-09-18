@@ -1,9 +1,17 @@
-# DO NOT include azure-functions-worker in this file
-# The Python Worker is managed by Azure Functions platform
-# Manually managing azure-functions-worker may cause unexpected issues
-
-azure-functions
+fastapi
+fastapi[standard]
+openai
 requests
-pyodbc
-azure-communication-networktraversal
-azure-communication-identity
+prompty==0.1.19
+promptflow
+promptflow-evals
+pandas
+azure-monitor-opentelemetry-exporter
+opentelemetry-instrumentation-fastapi
+jsonlines
+python-dotenv==1.0.1
+azure-search-documents==11.4.0
+gunicorn==21.2.0
+jupyter
+opentelemetry-instrumentation
+azure-identity==1.17.1
